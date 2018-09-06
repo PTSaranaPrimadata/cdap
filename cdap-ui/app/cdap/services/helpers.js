@@ -164,6 +164,10 @@ function humanReadableDuration(timeInSeconds, shortForm = false) {
   }
 }
 
+function timeSinceCreated(timeInSeconds, shortForm) {
+  return `${humanReadableDuration(timeInSeconds, shortForm)} ago`;
+}
+
 function contructUrl ({path}) {
   return [
     window.CDAP_CONFIG.sslEnabled? 'https://': 'http://',
@@ -409,6 +413,7 @@ export {
   convertBytesToHumanReadable,
   humanReadableNumber,
   humanReadableDuration,
+  timeSinceCreated,
   isDescendant,
   getArtifactNameAndVersion,
   insertAt,
