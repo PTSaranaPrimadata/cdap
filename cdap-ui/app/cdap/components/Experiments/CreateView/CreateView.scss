@@ -32,7 +32,7 @@
     }
   }
   .dataprep-connections-container {
-    height: calc(100% - 50px);
+    height: 100%;
     overflow-y: auto;
     .file-browser-container {
       height: 100%;
@@ -41,7 +41,7 @@
     // Even though clicking on it doesn't toggle the sidepanel
     // showing it is still giving a wrong impression to the user.
     .dataprep-browser-top-panel {
-      .title h5 .fa.fa-fw.disabled {
+      .title h5 .fa.fa-fw {
         display: none;
       }
     }
