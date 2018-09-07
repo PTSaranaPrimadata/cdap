@@ -52,6 +52,7 @@ import find from 'lodash/find';
 import If from 'components/If';
 import NoDefaultConnection from 'components/DataPrepConnections/NoDefaultConnection';
 import isObject from 'lodash/isObject';
+import DataPrepBrowserStore from 'components/DataPrep/DataPrepBrowser/DataPrepBrowserStore';
 
 require('./DataPrepConnections.scss');
 const PREFIX = 'features.DataPrepConnections';
@@ -276,8 +277,17 @@ export default class DataPrepConnections extends Component {
       );
   }
 
-  onActionFromConnectionsPopover = (action) => {
-    if (action === 'delete') {
+  onActionFromConnectionsPopover = (action, connectionid) => {
+    let state = DataPrepBrowserStore.getState();
+    let activeBrowser;
+    let activeConnectionId;
+    if (state.activeBrowser.name) {
+      activeBrowser = state.activeBrowser.name.toLowerCase();
+      activeConnectionId = state[activeBrowser].connectionId;
+    }
+    // Check if the deleted connection is the active connection
+    // If yes then redirect to default connection otherwise just reload connections.
+    if (action === 'delete' && activeConnectionId === connectionid) {
       return this.setState({
         redirectToDefaultConnectionOnDelete: true
       });
