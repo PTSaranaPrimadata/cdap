@@ -19,18 +19,21 @@ import PropTypes from 'prop-types';
 import {init} from 'components/FieldLevelLineage/store/ActionCreator';
 import {Provider} from 'react-redux';
 import Store, {Actions} from 'components/FieldLevelLineage/store/Store';
-import Fields from 'components/FieldLevelLineage/Fields';
+import Lineage from 'components/FieldLevelLineage/Lineage';
 import TimePicker from 'components/FieldLevelLineage/TimePicker';
+import {objectQuery} from 'services/helpers';
+import EntityTopPanel from 'components/EntityTopPanel';
 
 require('./FieldLevelLineage.scss');
 
 export default class FieldLevelLineage extends Component {
   static propTypes = {
-    entityId: PropTypes.string
+    match: PropTypes.object
   };
 
-  componentWillMount() {
-    init(this.props.entityId);
+  componentDidMount() {
+    const datasetId = objectQuery(this.props, 'match', 'params', 'datasetId');
+    init(datasetId);
   }
 
   componentWillUnmount() {
@@ -42,10 +45,16 @@ export default class FieldLevelLineage extends Component {
   render() {
     return (
       <Provider store={Store}>
-        <div className="field-level-lineage-container">
+        <div className="field-level-lineage">
+          <EntityTopPanel
+            breadCrumbAnchorLink='/'
+            breadCrumbAnchorLabel="Back"
+            title="Field Level Lineage"
+          />
+
           <TimePicker />
 
-          <Fields />
+          <Lineage />
         </div>
       </Provider>
     );

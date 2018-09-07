@@ -14,16 +14,20 @@
  * the License.
  */
 
-.field-level-lineage {
-  .time-picker-dropdown {
-    margin-left: 15px;
-    margin-top: 15px;
-  }
+import LineageSummary from 'components/FieldLevelLineage/LineageSummary';
+import { connect } from 'react-redux';
 
-  .custom-time-range-container {
-    display: inline-block;
-    position: relative;
-    margin-left: 10px;
-    width: 400px;
-  }
-}
+const mapStateToProps = (state) => {
+  return {
+    activeField: state.lineage.activeField,
+    datasetId: state.lineage.datasetId,
+    summary: state.lineage.incoming,
+    direction: 'incoming',
+  };
+};
+
+const IncomingLineage = connect(
+  mapStateToProps,
+)(LineageSummary);
+
+export default IncomingLineage;

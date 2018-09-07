@@ -17,8 +17,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import FieldRow from 'components/FieldLevelLineage/FieldRow';
-import LineageSummary from 'components/FieldLevelLineage/LineageSummary';
+import FieldRow from 'components/FieldLevelLineage/Fields/FieldRow';
 import FieldSearch from 'components/FieldLevelLineage/Fields/Search';
 import T from 'i18n-react';
 
@@ -36,30 +35,39 @@ function FieldsView({datasetId, fields}) {
   }
 
   return (
-    <div className="fields-list-container">
-      <LineageSummary />
-      <div className="fields-box">
-        <div className="header">
-          <div
+    <div className="fields-box">
+      <div className="header">
+        <div>
+          <strong
             className="dataset-name truncate"
             title={datasetId}
           >
             {datasetId}
-          </div>
+          </strong>
           <div className="fields-count">
             {T.translate(`${PREFIX}.fieldsCount`, { context: fields.length })}
           </div>
         </div>
 
         <FieldSearch />
+      </div>
 
-        <div className="fields-list">
+      <div className="fields-list">
+        <div className="fields-list-header">
+          Field name
+        </div>
+
+        <div className="fields-list-body">
           {
-            fields.map((field) => {
+            fields.map((field, index) => {
+              if (index === 3) {
+                field.lineage = false;
+              }
+
               return (
                 <FieldRow
-                  key={field}
-                  fieldName={field}
+                  key={field.name}
+                  field={field}
                 />
               );
             })

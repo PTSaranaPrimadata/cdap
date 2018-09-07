@@ -97,7 +97,8 @@ export function init(datasetId) {
     namespace: getCurrentNamespace(),
     entityId: datasetId,
     start: timeObj.start,
-    end: timeObj.end
+    end: timeObj.end,
+    includeCurrent: true
   };
 
   MyMetadataApi.getFields(params)
@@ -129,7 +130,8 @@ export function getFields(datasetId, prefix, start = 'now-7d', end = 'now') {
     namespace,
     entityId: datasetId,
     start,
-    end
+    end,
+    includeCurrent: true
   };
 
   if (prefix && prefix.length > 0) {
@@ -157,7 +159,7 @@ export function getLineageSummary(fieldName) {
     namespace,
     entityId: datasetId,
     fieldName,
-    direction: 'incoming',
+    direction: 'both',
     start,
     end
   };
@@ -192,7 +194,7 @@ export function search(e) {
   debouncedGetFields(datasetId, searchText);
 }
 
-export function getOperations() {
+export function getOperations(direction) {
   Store.dispatch({
     type: Actions.operationsLoading
   });
@@ -209,7 +211,7 @@ export function getOperations() {
     fieldName,
     start,
     end,
-    direction: 'incoming'
+    direction
   };
 
   MyMetadataApi.getFieldOperations(params)

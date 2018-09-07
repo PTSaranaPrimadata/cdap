@@ -14,22 +14,20 @@
  * the License.
  */
 
-@import '../../../styles/variables.scss';
-$border-color: $grey-05;
-$active-bg: $yellow-02-lighter;
-$active-border-color: var(--brand-primary-color);
+import LineageSummary from 'components/FieldLevelLineage/LineageSummary';
+import { connect } from 'react-redux';
 
-.field-level-lineage-container {
-  .fields-box .fields-list {
-    .field-row {
-      cursor: pointer;
-      padding: 3px 10px;
-      border-bottom: 1px solid $border-color;
+const mapStateToProps = (state) => {
+  return {
+    activeField: state.lineage.activeField,
+    datasetId: state.lineage.datasetId,
+    summary: state.lineage.incoming,
+    direction: 'outgoing',
+  };
+};
 
-      &.active {
-        background-color: $active-bg;
-        border: 1px solid $active-border-color;
-      }
-    }
-  }
-}
+const OutgoingLineage = connect(
+  mapStateToProps,
+)(LineageSummary);
+
+export default OutgoingLineage;

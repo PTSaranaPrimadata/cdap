@@ -1325,9 +1325,11 @@ features:
     searchPlaceholder: Search by field name
     Summary:
       datasetCount:
-        1: "{context} dataset"
-        _: "{context} datasets"
-      title: "Sources for:"
+        1: "{context} Dataset"
+        _: "{context} Datasets"
+      Title:
+        incoming: "Cause for:"
+        outgoing: "Impact for:"
       viewOperations: View operations
     TimeRangeOptions:
       CUSTOM: Custom
