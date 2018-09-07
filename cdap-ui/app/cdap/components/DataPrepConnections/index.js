@@ -869,6 +869,9 @@ export default class DataPrepConnections extends Component {
         let bucketName = workspaceInfo.properties['bucket-name'];
         if (bucketName) {
           path = `/${bucketName}/${key}`;
+        } else {
+          let state = DataPrepBrowserStore.getState();
+          path = state.s3.prefix;
         }
       }
       setActiveConnection = setS3AsActiveBrowser.bind(null, {name: ConnectionType.S3, id: this.state.activeConnectionid, path});
@@ -882,6 +885,9 @@ export default class DataPrepConnections extends Component {
         let bucketName = workspaceInfo.properties.bucket;
         if (bucketName) {
           path = `/${bucketName}/${path}/`;
+        } else {
+          let state = DataPrepBrowserStore.getState();
+          path = state.gcs.prefix;
         }
       }
       setActiveConnection = setGCSAsActiveBrowser.bind(null, {name: ConnectionType.GCS, id: this.state.activeConnectionid, path});
