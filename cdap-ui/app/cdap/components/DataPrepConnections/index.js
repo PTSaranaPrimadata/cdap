@@ -100,7 +100,8 @@ export default class DataPrepConnections extends Component {
       activeConnectionid,
       activeConnectionType,
       showAddConnectionPopover: false,
-      showUpload: false // FIXME: This is used only when showing with no routing. We can do better.
+      showUpload: false, // FIXME: This is used only when showing with no routing. We can do better.,
+      redirectToDefaultConnectionOnDelete: false
     };
   }
 
@@ -126,6 +127,22 @@ export default class DataPrepConnections extends Component {
           this.fetchConnectionTypes();
         }
       });
+    }
+  }
+
+  componentDidUpdate() {
+    if (this.state.redirectToDefaultConnectionOnDelete) {
+      let newState = {
+        redirectToDefaultConnectionOnDelete: false
+      };
+      if (!this.props.enableRouting) {
+        newState = {
+          ...newState,
+          activeConnectionid: null,
+          activeConnectionType: null
+        };
+      }
+      this.setState(newState, this.fetchConnectionTypes);
     }
   }
 
@@ -259,6 +276,15 @@ export default class DataPrepConnections extends Component {
       );
   }
 
+  onActionFromConnectionsPopover = (action) => {
+    if (action === 'delete') {
+      return this.setState({
+        redirectToDefaultConnectionOnDelete: true
+      });
+    }
+    this.fetchConnectionsList();
+  }
+
   fetchConnectionsList = (action, targetId) => {
     let namespace = getCurrentNamespace();
 
@@ -372,7 +398,7 @@ export default class DataPrepConnections extends Component {
 
               <ConnectionPopover
                 connectionInfo={database}
-                onAction={this.fetchConnectionsList}
+                onAction={this.onActionFromConnectionsPopover}
               />
             </div>
           );
@@ -406,7 +432,7 @@ export default class DataPrepConnections extends Component {
 
               <ConnectionPopover
                 connectionInfo={kafka}
-                onAction={this.fetchConnectionsList}
+                onAction={this.onActionFromConnectionsPopover}
               />
             </div>
           );
@@ -440,7 +466,7 @@ export default class DataPrepConnections extends Component {
 
               <ConnectionPopover
                 connectionInfo={s3}
-                onAction={this.fetchConnectionsList}
+                onAction={this.onActionFromConnectionsPopover}
               />
             </div>
           );
@@ -474,7 +500,7 @@ export default class DataPrepConnections extends Component {
 
               <ConnectionPopover
                 connectionInfo={gcs}
-                onAction={this.fetchConnectionsList}
+                onAction={this.onActionFromConnectionsPopover}
               />
             </div>
           );
@@ -508,7 +534,7 @@ export default class DataPrepConnections extends Component {
 
               <ConnectionPopover
                 connectionInfo={bq}
-                onAction={this.fetchConnectionsList}
+                onAction={this.onActionFromConnectionsPopover}
               />
             </div>
           );
@@ -662,6 +688,11 @@ export default class DataPrepConnections extends Component {
 
   renderRoutes() {
     const BASEPATH = '/ns/:namespace/connections';
+    if (this.state.redirectToDefaultConnectionOnDelete) {
+      return (
+        <Redirect to={`/ns/${getCurrentNamespace()}/connections`} />
+      );
+    }
     return (
       <Switch>
         <Route
@@ -800,6 +831,9 @@ export default class DataPrepConnections extends Component {
   }
 
   showNonRoutableContents() {
+    if (this.state.redirectToDefaultConnectionOnDelete) {
+      return null;
+    }
     if (this.state.showUpload) {
       return (
         <ConnectionsUpload
